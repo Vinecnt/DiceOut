@@ -1,5 +1,4 @@
 package com.example.diceout;
-
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -36,18 +35,16 @@ public class MainActivity extends AppCompatActivity {
     int die1;
     int die2;
     int die3;
+    int die4;
 
     // Field to hold the score text
     TextView scoreText;
-    // Arraylist to hold all 3 values
+
+    // Arraylist to hold all dice values
     ArrayList<Integer> dice;
 
     //Arraylist to hold all 3 dice images
     ArrayList<ImageView> diceImageViews;
-
-    //
-
-
 
 
     @Override
@@ -58,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        //this is a lambda expression that is new in Java 8
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         //set initial score
         score = 0;
 
+        //Assign TextViews
         rollResult = (TextView) findViewById(R.id.rollResult);
         scoreText = (TextView) findViewById(R.id.scoreText);
 
@@ -77,14 +76,20 @@ public class MainActivity extends AppCompatActivity {
         //Create Arraylsit for the dice value
         dice = new ArrayList<Integer>();
 
+        //Assign dice ImageViews
         ImageView die1image = (ImageView) findViewById(R.id.die1Image);
         ImageView die2image = (ImageView) findViewById(R.id.die2Image);
         ImageView die3image = (ImageView) findViewById(R.id.die3Image);
+        ImageView die4image = (ImageView) findViewById(R.id.die4Image);
 
+
+        //Assign the dice ImageViews into an ArrayList
         diceImageViews = new ArrayList<ImageView>();
         diceImageViews.add(die1image);
         diceImageViews.add(die2image);
         diceImageViews.add(die3image);
+        diceImageViews.add(die4image);
+
 
         //create greeting
         // Toast class??? check it out
@@ -93,20 +98,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void rollDice(View v){
-        rollResult.setText("Clicked");
 
         //Roll dice
         die1 = rand.nextInt(6) + 1;
         die2 = rand.nextInt(6) + 1;
         die3 = rand.nextInt(6) + 1;
+        die4 = rand.nextInt(6) + 1;
+
 
         // Set dice vales into an Arraylist. Clear previous values
         dice.clear();
         dice.add(die1);
         dice.add(die2);
         dice.add(die3);
+        dice.add(die4);
 
-        for(int dieOfSet = 0; dieOfSet<3; dieOfSet++){
+
+        for(int dieOfSet = 0; dieOfSet <dice.size() ; dieOfSet++){
             String imageName = "die_" + dice.get(dieOfSet) + ".png";
             try {
                 //get a stream of data, aka the right png dice image
@@ -125,12 +133,27 @@ public class MainActivity extends AppCompatActivity {
         //Building message with the result
         String msg;
 
-        if (die1 == die2 && die2 == die3){
+        //4 choose 3 is 4
+        if (    (die1 == die2 && die2 == die3) ||
+                (die1 == die2 && die2 == die4) ||
+                (die1 == die3 && die3 == die4) ||
+                (die2 == die3 && die3 == die4)
+            ){
             //Triples
             int scoreDelta = die1 * 100;
-            msg = "You rolled a triple " + die1 + "! You score " + scoreDelta + " points!";
+
+            //which to choose
+            int tripleDie = die1;
+            if(die1 != die2 && die1 != die3){
+                tripleDie = die2;
+            }
+            msg = "You rolled a triple " + tripleDie + "! You score " + scoreDelta + " points!";
             score += scoreDelta;
-        } else if (die1 == die2 || die1 == die3 || die2 == die3){
+
+        //4 choose for 2 is 6
+        } else if (die1 == die2 || die1 == die3 || die1 == die4 ||
+                    die2 == die3 || die2 == die4 ||
+                    die3 == die4){
             msg = "You rolled a doubles for 50 points!";
             score += 50;
         } else {
@@ -140,20 +163,21 @@ public class MainActivity extends AppCompatActivity {
         rollResult.setText(msg);
 
         //Update scoreText
-        scoreText.setText("Score: " + score);
+        String updatedScoreText = "Score: " + score;
+        scoreText.setText(updatedScoreText);
 
     }
-    // # 1
-    /* On the xml, theres a method called when the button is clicked. That method is rollDice.
+    /*  #1
+        On the xml, theres a method called when the button is clicked. That method is rollDice.
         Here in the java class, we made a Textview Object rollResult and then assigned it to a
         view objected found from the ID "rollResult". This is view is a textview object, but the
-         method returns a view so you need to cast it. Same goes for the roll Button. Now we have
-         two connected Textview and Button Objects.
-     */
-    //#2
-    /* Widgets are user interface elements. So technically, a Texvtiew is a widget sicne the user
-     interacts with it
-     */
+        method returns a view so you need to cast it. Same goes for the roll Button. Now we have
+        two connected Textview and Button Objects.
+
+        #2
+        Widgets are user interface elements. So technically, a Texvtiew is a widget sicne the user
+        interacts with it
+    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
