@@ -9,7 +9,8 @@ Skills:
 - Relative layouts, assets
 
 Extra features:
+- [x] Include a 4th die
 - [ ] doubles equal 50 time the roll of double, triples equal 100 * the roll of the triple
   - [ ] double check the logic of triple
-- [ ] Include a 4th die
 - [ ] 300 points for quadruplets
+- [ ] add a score board
