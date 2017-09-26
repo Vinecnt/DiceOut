@@ -140,15 +140,16 @@ public class MainActivity extends AppCompatActivity {
                 (die2 == die3 && die3 == die4)
             ){
             //Triples
-            int scoreDelta = die1 * 100;
-
+//            int scoreDelta = die1 * 100;
+//
             //which to choose
             int tripleDie = die1;
-            if(die1 != die2 && die1 != die3){
+            //don't need to check die4 b/c if we know theres a triple and the scenario is 122?. we know the 4th die is also 2 since a we knows therea triple
+            if( (die1 != die2) && (die1 != die3) ){
                 tripleDie = die2;
             }
-            msg = "You rolled a triple " + tripleDie + "! You score " + scoreDelta + " points!";
-            score += scoreDelta;
+            msg = "You rolled a triple " + tripleDie + "! You score " + 100 + " points!";
+            score += 100;
 
         //4 choose for 2 is 6
         } else if (die1 == die2 || die1 == die3 || die1 == die4 ||
