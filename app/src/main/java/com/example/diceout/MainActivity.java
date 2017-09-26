@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Animation;
 
 import java.io.IOError;
 import java.io.IOException;
@@ -58,11 +60,31 @@ public class MainActivity extends AppCompatActivity {
         //this is a lambda expression that is new in Java 8
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                rollDice(view);
-            }
-        });
+            public void onClick(final View view) {
+                final Animation anim1 = AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake);
+                final Animation.AnimationListener animationListener = new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        rollDice(view);
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                };
+
+                anim1.setAnimationListener(animationListener);
+
+                for(ImageView item: diceImageViews) {
+                    item.startAnimation(anim1);
+                }
+            }
+
+        });
         //set initial score
         score = 0;
 
@@ -140,12 +162,11 @@ public class MainActivity extends AppCompatActivity {
                 (die2 == die3 && die3 == die4)
             ){
             //Triples
-//            int scoreDelta = die1 * 100;
-//
+            //int scoreDelta = die1 * 100;
+
             //which to choose
             int tripleDie = die1;
-            //don't need to check die4 b/c if we know theres a triple and the scenario is 122?. we know the 4th die is also 2 since a we knows therea triple
-            if( (die1 != die2) && (die1 != die3) ){
+            if(die1 != die2 && die1 != die3){
                 tripleDie = die2;
             }
             msg = "You rolled a triple " + tripleDie + "! You score " + 100 + " points!";
